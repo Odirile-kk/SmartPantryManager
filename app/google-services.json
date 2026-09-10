@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "791094337326",
+    "project_id": "chatapp-ee704",
+    "storage_bucket": "chatapp-ee704.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791094337326:android:03855dd38138a14cba24bf",
+        "android_client_info": {
+          "package_name": "com.example.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWWFIFIft1hfURSLM3_0BgGc5Jg4Ig12c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791094337326:android:37fa2cca7ada1f12ba24bf",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWWFIFIft1hfURSLM3_0BgGc5Jg4Ig12c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791094337326:android:ab4468fdd08e65f4ba24bf",
+        "android_client_info": {
+          "package_name": "com.smartpantry.manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWWFIFIft1hfURSLM3_0BgGc5Jg4Ig12c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.example.smartpantrymanager.ui.theme
+package com.smartpantrymanager.ui.theme
 
 import android.app.Activity
 import android.os.Build
