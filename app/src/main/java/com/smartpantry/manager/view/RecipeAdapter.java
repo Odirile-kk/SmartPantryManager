@@ -3,6 +3,7 @@ package com.smartpantry.manager.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.model.PantryItem;
-
 import com.smartpantry.manager.model.Recipe;
 import com.smartpantry.manager.model.RecipeMatcher;
 
@@ -51,10 +51,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.Holder> {
 
         if (missing == 0 && total > 0) {
             h.summary.setText("All " + total + " ingredients in pantry • Ready to cook!");
+            h.matchBadge.setVisibility(View.VISIBLE);
         } else {
             h.summary.setText("You have " + matched + " of " + total + " ingredients (missing " + missing + ")");
+            h.matchBadge.setVisibility(View.GONE);
         }
 
+        h.btnGoToRecipe.setOnClickListener(v -> listener.open(r));
         h.itemView.setOnClickListener(v -> listener.open(r));
     }
 
@@ -63,12 +66,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.Holder> {
     }
 
     static class Holder extends RecyclerView.ViewHolder {
-        TextView name, summary;
+        TextView name, summary, matchBadge;
+        Button btnGoToRecipe;
 
         Holder(View v) {
             super(v);
             name = v.findViewById(R.id.tvName);
             summary = v.findViewById(R.id.tvSummary);
+            matchBadge = v.findViewById(R.id.tvMatchBadge);
+            btnGoToRecipe = v.findViewById(R.id.btnGoToRecipe);
         }
     }
 }

@@ -7,11 +7,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.smartpantry.manager.R;
 import com.smartpantry.manager.controller.PantryRepository;
+import com.smartpantry.manager.controller.RecipeRepository;
 import com.smartpantry.manager.model.PantryItem;
+import com.smartpantry.manager.model.Recipe;
+import com.smartpantry.manager.model.RecipeMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +32,14 @@ import java.util.Locale;
 
 public class IngredientsFragment extends Fragment {
     private PantryAdapter adapter;
-    private TextView count, empty;
+    private TextView count, empty, tvMatchSubtitle;
     private EditText etSearch;
+    private CardView cardMatchAlert;
+    private Button btnGoToRecipeAlert;
     private final List<PantryItem> pantry = new ArrayList<>();
+    private final List<Recipe> recipes = new ArrayList<>();
     private final PantryRepository repository = new PantryRepository();
+    private final RecipeRepository recipeRepository = new RecipeRepository();
 
     @Nullable
     @Override
@@ -39,6 +48,9 @@ public class IngredientsFragment extends Fragment {
         count = v.findViewById(R.id.tvCount);
         empty = v.findViewById(R.id.tvEmpty);
         etSearch = v.findViewById(R.id.etSearch);
+        cardMatchAlert = v.findViewById(R.id.cardMatchAlert);
+        tvMatchSubtitle = v.findViewById(R.id.tvMatchSubtitle);
+        btnGoToRecipeAlert = v.findViewById(R.id.btnGoToRecipeAlert);
         
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -66,9 +78,41 @@ public class IngredientsFragment extends Fragment {
                 pantry.add(x);
             }
             updateList();
+            checkMatchAlert();
+        });
+
+        recipeRepository.listen((snap, e) -> {
+            recipes.clear();
+            if (snap != null) for (QueryDocumentSnapshot d : snap) {
+                recipes.add(d.toObject(Recipe.class));
+            }
+            checkMatchAlert();
         });
 
         return v;
+    }
+
+    private void checkMatchAlert() {
+        Recipe matched = null;
+        for (Recipe r : recipes) {
+            if (RecipeMatcher.matches(r, pantry)) {
+                matched = r;
+                break;
+            }
+        }
+
+        if (matched != null) {
+            final Recipe finalRecipe = matched;
+            cardMatchAlert.setVisibility(View.VISIBLE);
+            tvMatchSubtitle.setText("You have all ingredients to make " + finalRecipe.getName() + "!");
+            btnGoToRecipeAlert.setOnClickListener(v -> {
+                Intent i = new Intent(getActivity(), RecipeDetailActivity.class);
+                i.putExtra("recipeId", finalRecipe.getId());
+                startActivity(i);
+            });
+        } else {
+            cardMatchAlert.setVisibility(View.GONE);
+        }
     }
 
     private void openEditor(PantryItem x) {
