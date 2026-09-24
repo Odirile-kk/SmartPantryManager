@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,29 +20,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add ingredient"
-                android:textSize="28sp" />
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Enter what is currently in your pantry."
+                android:textColor="@color/gray_text"
                 android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingredient Name"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="24dp" />
 
             <EditText
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ingredient name"
+                android:layout_height="52dp"
+                android:hint="e.g. Tomato, Pasta, Eggs"
                 android:inputType="textCapSentences"
-                android:layout_marginTop="22dp" />
+                android:background="@drawable/bg_input"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expiry Date"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp" />
 
             <EditText
                 android:id="@+id/etExpiry"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Expiry date (optional, YYYY-MM-DD)"
+                android:layout_height="52dp"
+                android:hint="YYYY-MM-DD (optional)"
                 android:inputType="date"
-                android:layout_marginTop="12dp" />
+                android:background="@drawable/bg_input"
+                android:layout_marginTop="8dp" />
         </LinearLayout>
     </ScrollView>
 
@@ -49,22 +73,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_weight="1"
             android:text="Cancel"
-            style="@style/Widget.Material3.Button.TextButton"/>
+            app:cornerRadius="26dp"
+            style="@style/Widget.Material3.Button.OutlinedButton"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_weight="1"
             android:text="Save"
-            android:layout_marginStart="10dp" />
+            app:cornerRadius="26dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:layout_marginStart="12dp" />
     </LinearLayout>
 </LinearLayout>
