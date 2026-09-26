@@ -39,17 +39,28 @@ public class SuggestionsFragment extends Fragment {
         RecyclerView rv = v.findViewById(R.id.rvSuggestions);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecipeAdapter(r -> {
-            Intent i = new Intent(getActivity(), RecipeDetailActivity.class);
-            i.putExtra("recipeId", r.getId());
-            startActivity(i);
+            if (r != null && r.getId() != null) {
+                Intent i = new Intent(getActivity(), RecipeDetailActivity.class);
+                i.putExtra("recipeId", r.getId());
+                startActivity(i);
+            }
         });
         rv.setAdapter(adapter);
 
         loadPantry();
         new RecipeRepository().listen((snap, e) -> {
             recipes.clear();
-            if (snap != null)
-                for (QueryDocumentSnapshot d : snap) recipes.add(d.toObject(Recipe.class));
+            if (snap != null) {
+                for (QueryDocumentSnapshot d : snap) {
+                    Recipe r = d.toObject(Recipe.class);
+                    if (r != null) {
+                        if (r.getId() == null || r.getId().isEmpty()) {
+                            r.setId(d.getId());
+                        }
+                        recipes.add(r);
+                    }
+                }
+            }
             update();
         });
 
@@ -61,8 +72,12 @@ public class SuggestionsFragment extends Fragment {
             pantry.clear();
             if (snap != null) for (QueryDocumentSnapshot d : snap) {
                 PantryItem x = d.toObject(PantryItem.class);
-                x.setId(d.getId());
-                pantry.add(x);
+                if (x != null) {
+                    if (x.getId() == null || x.getId().isEmpty()) {
+                        x.setId(d.getId());
+                    }
+                    pantry.add(x);
+                }
             }
             update();
         });

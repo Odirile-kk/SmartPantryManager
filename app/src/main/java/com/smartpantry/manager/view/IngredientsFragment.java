@@ -74,8 +74,12 @@ public class IngredientsFragment extends Fragment {
             pantry.clear();
             if (snap != null) for (QueryDocumentSnapshot d : snap) {
                 PantryItem x = d.toObject(PantryItem.class);
-                x.setId(d.getId());
-                pantry.add(x);
+                if (x != null) {
+                    if (x.getId() == null || x.getId().isEmpty()) {
+                        x.setId(d.getId());
+                    }
+                    pantry.add(x);
+                }
             }
             updateList();
             checkMatchAlert();
@@ -84,7 +88,13 @@ public class IngredientsFragment extends Fragment {
         recipeRepository.listen((snap, e) -> {
             recipes.clear();
             if (snap != null) for (QueryDocumentSnapshot d : snap) {
-                recipes.add(d.toObject(Recipe.class));
+                Recipe r = d.toObject(Recipe.class);
+                if (r != null) {
+                    if (r.getId() == null || r.getId().isEmpty()) {
+                        r.setId(d.getId());
+                    }
+                    recipes.add(r);
+                }
             }
             checkMatchAlert();
         });
