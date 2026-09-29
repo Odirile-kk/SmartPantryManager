@@ -1,19 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Suggestions"
-        android:textSize="28sp" />
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Discover what you can cook with your current ingredients."
+        android:textSize="15sp"
+        android:textColor="@color/gray_text"
         android:layout_marginTop="5dp" />
 
     <TextView
@@ -21,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="No suggestions yet. Add more ingredients to see recipes!"
+        android:textColor="@color/gray_text"
         android:gravity="center"
         android:padding="38dp" />
 
