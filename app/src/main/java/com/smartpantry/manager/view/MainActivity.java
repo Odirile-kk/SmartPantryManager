@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        BottomNavigationView nav = findViewById(R.id.bottomNav);
+        if (nav != null) {
+            nav.setSelectedItemId(R.id.nav_pantry);
+        }
+    }
+
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

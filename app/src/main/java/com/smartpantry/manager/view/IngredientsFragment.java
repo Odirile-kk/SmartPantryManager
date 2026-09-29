@@ -9,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,10 +32,9 @@ import java.util.Locale;
 
 public class IngredientsFragment extends Fragment {
     private PantryAdapter adapter;
-    private TextView count, empty, tvMatchSubtitle;
+    private TextView count, empty;
     private EditText etSearch;
-    private CardView cardMatchAlert;
-    private Button btnGoToRecipeAlert;
+    private LinearLayout llMatchAlertContainer;
     private final List<PantryItem> pantry = new ArrayList<>();
     private final List<Recipe> recipes = new ArrayList<>();
     private final PantryRepository repository = new PantryRepository();
@@ -48,9 +47,7 @@ public class IngredientsFragment extends Fragment {
         count = v.findViewById(R.id.tvCount);
         empty = v.findViewById(R.id.tvEmpty);
         etSearch = v.findViewById(R.id.etSearch);
-        cardMatchAlert = v.findViewById(R.id.cardMatchAlert);
-        tvMatchSubtitle = v.findViewById(R.id.tvMatchSubtitle);
-        btnGoToRecipeAlert = v.findViewById(R.id.btnGoToRecipeAlert);
+        llMatchAlertContainer = v.findViewById(R.id.llMatchAlertContainer);
         
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -103,25 +100,38 @@ public class IngredientsFragment extends Fragment {
     }
 
     private void checkMatchAlert() {
-        Recipe matched = null;
+        if (getContext() == null || llMatchAlertContainer == null) return;
+        llMatchAlertContainer.removeAllViews();
+
+        List<Recipe> matchedRecipes = new ArrayList<>();
         for (Recipe r : recipes) {
             if (RecipeMatcher.matches(r, pantry)) {
-                matched = r;
-                break;
+                matchedRecipes.add(r);
             }
         }
 
-        if (matched != null) {
-            final Recipe finalRecipe = matched;
-            cardMatchAlert.setVisibility(View.VISIBLE);
-            tvMatchSubtitle.setText("You have all ingredients to make " + finalRecipe.getName() + "!");
-            btnGoToRecipeAlert.setOnClickListener(v -> {
-                Intent i = new Intent(getActivity(), RecipeDetailActivity.class);
-                i.putExtra("recipeId", finalRecipe.getId());
-                startActivity(i);
-            });
+        if (!matchedRecipes.isEmpty()) {
+            llMatchAlertContainer.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+
+            for (Recipe r : matchedRecipes) {
+                final Recipe targetRecipe = r;
+                View cardView = inflater.inflate(R.layout.item_match_alert, llMatchAlertContainer, false);
+
+                TextView tvSubtitle = cardView.findViewById(R.id.tvMatchSubtitle);
+                Button btnGoToRecipe = cardView.findViewById(R.id.btnGoToRecipeAlert);
+
+                tvSubtitle.setText("You have all ingredients to make " + targetRecipe.getName() + "!");
+                btnGoToRecipe.setOnClickListener(v -> {
+                    Intent i = new Intent(getActivity(), RecipeDetailActivity.class);
+                    i.putExtra("recipeId", targetRecipe.getId());
+                    startActivity(i);
+                });
+
+                llMatchAlertContainer.addView(cardView);
+            }
         } else {
-            cardMatchAlert.setVisibility(View.GONE);
+            llMatchAlertContainer.setVisibility(View.GONE);
         }
     }
 

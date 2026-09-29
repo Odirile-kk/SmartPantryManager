@@ -1,5 +1,6 @@
 package com.smartpantry.manager.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.smartpantry.manager.R;
@@ -34,7 +36,14 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btnSave).setOnClickListener(v -> save());
-        findViewById(R.id.btnCancel).setOnClickListener(v -> finish());
+        findViewById(R.id.btnCancel).setOnClickListener(v -> navigateBackToList());
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateBackToList();
+            }
+        });
     }
 
     private void save() {
@@ -47,11 +56,15 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         PantryItem item = new PantryItem(id, n, expiry.getText().toString().trim());
         PantryRepository repo = new PantryRepository();
 
-        repo.save(item).addOnSuccessListener(aVoid -> {
-            Toast.makeText(AddEditIngredientActivity.this, id == null ? "Ingredient added" : "Ingredient updated", Toast.LENGTH_SHORT).show();
-            finish();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(AddEditIngredientActivity.this, "Failed to update database", Toast.LENGTH_SHORT).show();
-        });
+        repo.save(item);
+        Toast.makeText(AddEditIngredientActivity.this, id == null ? "Ingredient added" : "Ingredient updated", Toast.LENGTH_SHORT).show();
+        navigateBackToList();
+    }
+
+    private void navigateBackToList() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
     }
 }
