@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,7 +61,7 @@ public class IngredientsFragment extends Fragment {
         adapter = new PantryAdapter(new PantryAdapter.Listener() {
             public void edit(PantryItem x) { openEditor(x); }
             public void update(PantryItem x) { openEditor(x); }
-            public void delete(PantryItem x) { repository.delete(x.getId()); }
+            public void delete(PantryItem x) { confirmDelete(x); }
         });
         rv.setAdapter(adapter);
 
@@ -141,6 +142,16 @@ public class IngredientsFragment extends Fragment {
         i.putExtra("name", x.getName());
         i.putExtra("expiry", x.getExpiryDate());
         startActivity(i);
+    }
+
+    private void confirmDelete(PantryItem x) {
+        if (getContext() == null || x == null) return;
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Delete Ingredient")
+                .setMessage("Are you sure you want to delete \"" + (x.getName() != null ? x.getName() : "this item") + "\"?")
+                .setPositiveButton("Delete", (dialog, which) -> repository.delete(x.getId()))
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     private void updateList() {

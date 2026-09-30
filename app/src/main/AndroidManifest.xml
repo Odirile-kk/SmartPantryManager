@@ -8,7 +8,7 @@
         android:theme="@style/Theme.SmartPantry">
         <activity android:name=".view.SettingsActivity" />
         <activity android:name=".view.RecipeDetailActivity" />
-        <activity android:name=".view.SuggestionsActivity" />
+<!--        <activity android:name=".view.SuggestionsActivity" />-->
         <activity android:name=".view.AddEditIngredientActivity" />
         <activity android:name=".view.MainActivity" android:exported="true" />
         <activity android:name=".view.SplashActivity" android:exported="true">
