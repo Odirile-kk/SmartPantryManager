@@ -44,7 +44,7 @@ Smart Pantry Manager is an Android application designed to help users track thei
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:Odirile-kk/SmartPantryManager.git
    cd SmartPantryManager
    ```
 
